@@ -1,0 +1,41 @@
+NAME: Jovanna Maria Jomon
+ROLL NO.:26
+CLASS: S6DS
+DATE:22-03-2023
+
+EXPERIMENT  3
+STATISTICAL OPERATIONS IN R
+
+PROGRAM:
+
+hp<-c(110,110,93,210,175,86)
+name<-c("Mazda RX4","Mazda RX4 Wag","Datsun 710","Hornet 4 Drive","Hornet Sportabout","Valiant")
+df<- data.frame(name,hp)
+print(df)
+m=mean(df$hp)
+print(paste("mean is:",m))
+med=median(df$hp)
+print(paste("median is:",med))
+mode<-names(sort(-table(df$hp)))[1]
+print(paste("mode is:",mode))
+print("summary is:")
+print(summary(df$hp))
+boxplot(df$hp, xlab="x", ylab="y", main="boxplot")
+
+OUTPUT
+
+> source("/home/oem/jovanna/statistics.r", encoding = "UTF-8")
+               name  	 	 hp
+1         Mazda RX4 	 110
+2     Mazda RX4 Wag 	 110
+3        Datsun 710  		 93
+4    Hornet 4 Drive 	 210
+5 Hornet Sportabout 	 175
+6           Valiant  		 86
+[1] "mean is: 130.666666666667"
+[1] "median is: 110"
+[1] "mode is: 110"
+[1] "summary is:"
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  86.00   97.25  110.00  130.67  158.75  210.00 
+> 

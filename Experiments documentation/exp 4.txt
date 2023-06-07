@@ -1,0 +1,63 @@
+NAME: Jovanna Maria Jomon
+ROLL NO.:26
+CLASS: S6DS
+DATE:22-03-2023
+
+EXPERIMENT  4
+FACTORIAL OF LARGEST SUM OF UNIQUE ROWS
+
+PROGRAM:
+
+fact=function(x){
+  return (prod(1:x) )
+}
+occurence=function(df,row){
+  flag=TRUE
+  if (row==nrow(df))
+    return (!TRUE)
+  for (adth in row+1:nrow(df)){
+    flag=flag && identical(df[row,],df[adth,])
+  }
+  return (!flag)
+}
+
+unique_pole=function(df){
+  temp=data.frame()
+  temp.columns=colnames(df)
+  for(r in 1:nrow(df)){
+    if (occurence(df,r))
+    temp=rbind(temp,df[r,])
+  }
+  print(temp)
+}
+
+df=read.table('data1.txt',sep=' ')
+df=unique_pole(df)
+row_sums=c()
+for (i in 1:nrow(df)){
+  temp=unique(unlist(df[i,]))
+  print(temp)
+  row_sums = c(row_sums,sum(temp))
+}
+print("row sums are:")
+print(row_sums)
+print("factorial of max rowsum is:")
+print(fact(max(row_sums)))
+
+OUTPUT
+
+  V1 V2 V3 V4 V5 V6
+1  2  5  4  3  1  6
+2  2  3  5  3  1  6
+3  4  6  8  4  6  3
+4  8  4  9  6  5  1
+5  2  3  5  3  1  6
+[1] 2 5 4 3 1 6
+[1] 2 3 5 1 6
+[1] 4 6 8 3
+[1] 8 4 9 6 5 1
+[1] 2 3 5 1 6
+[1] "row sums are:"
+[1] 21 17 21 33 17
+[1] "factorial of max rowsum is:"
+[1] 8.683318e+36

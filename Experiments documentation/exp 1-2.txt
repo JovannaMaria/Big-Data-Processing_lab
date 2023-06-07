@@ -1,0 +1,289 @@
+
+S6 DS
+
+08/03/2023
+EXPERIMENT 1
+
+How to Install Apache Hadoop on Ubuntu 22.04
+
+Step 1: Install Java Development Kit
+
+	Java is a necessary component of Apache Hadoop, so you need to download and install a Java Development Kit on all the nodes in your network where Hadoop will be installed. You can either download the JRE or JDK. If you’re only looking to run Hadoop, then JRE is sufficient, but if you want to create applications that run on Hadoop, then you’ll need to install the JDK. The latest version of Java that Hadoop supports is Java 8 and 11. You can verify this on Apache’s website and download the relevant version of Java depending on your OS.
+
+1.The default Ubuntu repositories contain Java 8 and Java 11 both. Use the following command to install it.
+
+2.Once you have successfully installed it, check the current Java version:
+
+3.You can find the location of the JAVA_HOME directory by running the following command. That will be required latest in this article.
+
+
+Step 2: Create User for Hadoop
+
+	All the Hadoop components will run as the user that you create for Apache Hadoop, and the user will also be used for logging in to Hadoop’s web interface. You can create a new user account with the “sudo” command or you can create a user account with “root” permissions. The user account with root permissions is more secure but might not be as convenient for users who are not familiar with the command line.
+
+1.Run the following command to create a new user with the name “hadoop”:
+
+
+2.Switch to the newly created hadoop user:
+
+
+3.Now configure password-less SSH access for the newly created hadoop user. Generate an SSH keypair first:
+
+4.Copy the generated public key to the authorized key file and set the proper permissions:
+
+
+5.Now try to SSH to the localhost.
+
+Step 3: Install Hadoop on Ubuntu
+	Once you’ve installed Java, you can download Apache Hadoop and all its related components, including Hive, Pig, Sqoop, etc. You can find the latest version on the official Hadoop’s download page. Make sure to download the binary archive (not the source).
+1.Use the following command to download Hadoop 3.3.4:
+
+2.Once you’ve downloaded the file, you can unzip it to a folder on your hard drive.
+
+
+3.Rename the extracted folder to remove version information. This is an optional step, but if you don’t want to rename, then adjust the remaining configuration paths.
+
+
+4.Next, you will need to configure Hadoop and Java Environment Variables on your system. Open the ~/.bashrc file in your favorite text editor:
+
+
+Append the below lines to the file. You can find the JAVA_HOME location by running dirname $(dirname $(readlink -f $(which java))) command on the terminal. Save the file and close it.
+
+
+
+
+5.Load the above configuration in the current environment.
+
+
+6.You also need to configure JAVA_HOME in hadoop-env.sh file. Edit the Hadoop environment variable file in the text editor:
+
+
+Search for the “export JAVA_HOME” and configure it with the value found in step 1. See the below screenshot:
+
+Save the file and close it.
+Step 4: Configuring Hadoop
+Next is to configure Hadoop configuration files available under etc directory.
+1. First, you will need to create the namenode and datanode directories inside the Hadoop user home directory. Run the following command to create both directories:
+
+2. Next, edit the core-site.xml file and update with your system hostname:
+
+Change the following name as per your system hostname:
+
+
+
+
+
+
+
+
+
+
+
+
+Save and close file.
+
+3.Then, edit the hdfs-site.xml file:
+
+Change the NameNode and DataNode directory paths as shown below:
+
+Save and close the file.
+
+4.Then, edit the mapred-site.xml file:
+
+
+Make the following changes:
+
+
+
+
+
+
+Save and close the file.
+
+5.Then, edit the yarn-site.xml file:
+
+
+
+Make the following changes:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Save the file and close it.
+
+Step 5: Start Hadoop Cluster
+
+Before starting the Hadoop cluster. You will need to format the Namenode as a hadoop user.
+    Run the following command to format the Hadoop Namenode
+
+
+
+
+
+
+
+
+
+
+
+
+Once the namenode directory is successfully formatted with hdfs file system, you will see the message “Storage directory /home/hadoop/hadoopdata/hdfs/namenode has been successfully formatted“.
+
+Then start the Hadoop cluster with the following command.
+
+
+Once all the services started, you can access the Hadoop at: http://localhost:9870
+
+And the Hadoop application page is available at http://localhost:8088
+
+
+
+
+
+
+
+
+
+
+
+
+
+Conclusion
+Installing Apache Hadoop on Ubuntu can be a tricky task for newbies, especially if they only follow the instructions in the documentation. Thankfully, this article provides a step-by-step guide that will help you install Apache Hadoop on Ubuntu with ease. All you have to do is follow the instructions listed in this article, and you can be sure that your Hadoop installation will be up and running in no time.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EXPERIMENT 2
+
+Explore Various Shell Commands in Hadoop
+
+//mkdir - Make a new folder console
+hdfs dfs -mkdir /console
+
+//rmdir - Remove directory
+hdfs dfs -rmdir /console
+
+//touchz - Make new files
+hdfs dfs -touchz /console/file1.txt
+hdfs dfs -touchz /console/file2.txt
+
+//rm - Remove files
+hdfs dfs -rm /console/file1.txt
+Deleted /console/file1.txt
+
+//count - Return no of directories files and byte
+hdfs dfs -count /
+           3            0                  0 /
+           
+//ls - Return Directory
+hdfs dfs -ls /console/
+Found 3 items
+drwxr-xr-x   - oem supergroup          0 2023-03-08 09:49 /console/file1.txt
+drwxr-xr-x   - oem supergroup          0 2023-03-08 09:49 /console/file2.txt
+drwxr-xr-x   - oem supergroup          0 2023-03-08 09:55 /console/file3.txt
+
+//put - Copy files from local into hdfs
+hdfs dfs -put  ~/localfile1.txt /console
+           
+//get - Copy files from hdfs into local  
+
+hdfs dfs -put  /console/file1.txt ~/
+
+//appendToFile - Append data from one file to another
+hdfs dfs -appendToFile ~/localfile2.txt /console/file1.txt
+
+//cat - Copies file data to stdout
+hdfs dfs -cat /console/file1.txt
+
+//mv - Move folder or files from one directory to another
+hdfs dfs -mv /console/file2.txt /console1
+
+
+//copyFromLocal - Copying of file to HDFS from a local file 
+hdfs dfs -copyFromLocal /home/oem/Documents/jovanna/wc.txt /gg/sample/sample2.txt
+
+//copyToLocal - Copying of file from HDFS to a local file 
+hdfs dfs -copyToLocal  /gg/sample/sample2.txt /home/oem/Documents/jovanna/ex1.txt
+
+//head - copies first few lines to stdout
+hdfs dfs -head /gg/sample/sample2.txt
+hello nice to meet you
+hi
+hadoop
+world
+
+//tail - copies last few lines to stdout
+hdfs dfs -tail /gg/sample/sample2.txt
+hello nice to meet you
+hi
+hadoop
+world
+
+//cp - File copying from source to destination
+hdfs dfs -cp /gg/sample/sample2.txt /gg 
+
+//rmr - This command deletes a file from HDFS recursively.
+hdfs dfs -rmr /geeks/myfile.txt
+rmr: DEPRECATED: Please use '-rm -r' instead.
+Deleted /geeks/myfile.txt
+
+//du - It will give the size of each file in directory.
+hdfs dfs -du /geeks
+0  0  /geeks/myfile.txt
+
+//dus - This command will give the total size of directory/file.
+hdfs dfs -dus /geeks
+dus: DEPRECATED: Please use 'du -s' instead.
+0  0  /geeks
+
+//stat - It will give the last modified time of directory or pat
+bin/hdfs dfs -stat /geeks
+2023-03-08 05:33:58
+
+//setrep - This command is used to change the replication factor of a file/directory in HDFS. 
+hdfs dfs -setrep -R -w 6 /geeks/myfile.txt
+Replication 6 set: /geeks/myfile.txt
+Waiting for /geeks/myfile.txt ... done
+

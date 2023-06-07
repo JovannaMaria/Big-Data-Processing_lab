@@ -1,0 +1,13 @@
+hp<-c(110,110,93,210,175,86)
+name<-c("Mazda RX4","Mazda RX4 Wag","Datsun 710","Hornet 4 Drive","Hornet Sportabout","Valiant")
+df<- data.frame(name,hp)
+print(df)
+m=mean(df$hp)
+print(paste("mean is:",m))
+med=median(df$hp)
+print(paste("median is:",med))
+mode<-names(sort(-table(df$hp)))[1]
+print(paste("mode is:",mode))
+print("summary is:")
+print(summary(df$hp))
+boxplot(df$hp, xlab="x", ylab="y", main="boxplot")

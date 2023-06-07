@@ -1,0 +1,51 @@
+NAME: Jovanna Maria Jomon
+ROLL NO.:26
+CLASS: S6DS
+DATE:20-04-2023
+
+EXPERIMENT  10
+DECISION TREE CLASSIFIER AND SVM
+
+PROGRAM:
+
+library(datasets)
+library(caTools)
+library(party)
+library(dplyr)
+library(magrittr)
+
+data("readingSkills")
+head(readingSkills)
+sample_data = sample.split(readingSkills, SplitRatio = 0.8)
+train_data <- subset(readingSkills, sample_data == TRUE)
+test_data <- subset(readingSkills, sample_data == FALSE)
+model<- ctree(nativeSpeaker ~ ., train_data)
+plot(model)
+#print(model)
+# testing the people who are native speakers
+# and those who are not
+predict_model<-predict(model, test_data)
+
+# creates a table to count how many are classified
+# as native speakers and how many are not
+m_at <- table(test_data$nativeSpeaker, predict_model)
+ac<-sum(diag(m_at)) / sum(m_at)
+print(paste('Accuracy for decision tree test is found to be', ac))
+
+OUTPUT
+
+[1] "Accuracy for test is found to be 0.94"
+
+Call:
+svm(formula = y ~ ., data = dat, kernel = "linear", cost = 10, scale = FALSE)
+Parameters:
+   SVM-Type:  C-classification 
+ SVM-Kernel:  linear 
+       cost:  10 
+Number of Support Vectors:  6
+
+
+
+
+
+

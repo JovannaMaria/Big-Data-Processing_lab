@@ -1,0 +1,57 @@
+NAME: Jovanna Maria Jomon
+ROLL NO.:26
+CLASS: S6DS
+DATE:07-06-2023
+
+EXPERIMENT  11
+SPARK APPLICATION TO PRINT
+EVEN AND ODD NUMBERS
+IN A DATAFRAME
+
+PROGRAM:
+
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import udf
+from pyspark.sql.types import BooleanType
+
+# Create SparkSession
+spark = SparkSession.builder.appName("OddEvenCount").getOrCreate()
+
+# Load the dataset
+data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15]
+df = spark.createDataFrame(data, "integer").toDF("number")
+
+# Define UDF to check if a number is odd or even
+def is_odd(number):
+    return number % 2 == 1
+
+is_odd_udf = udf(is_odd, BooleanType())
+
+# Add a new column indicating whether each number is odd or even
+df = df.withColumn("is_odd", is_odd_udf(df["number"]))
+
+# Count the number of odd and even numbers
+odd_count = df.filter(df["is_odd"]).count()
+even_count = df.filter(~df["is_odd"]).count()
+
+# Print the results
+print("Number of odd numbers:", odd_count)
+print("Number of even numbers:", even_count)
+
+# Stop the SparkSession
+spark.stop()
+
+
+
+OUTPUT
+
+23/06/07 11:32:53 WARN Utils: Your hostname, DSLAB30 resolves to a loopback address: 127.0.1.1; using 172.18.120.220 instead (on interface enp0s31f6)
+23/06/07 11:32:53 WARN Utils: Set SPARK_LOCAL_IP if you need to bind to another address
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+23/06/07 11:32:53 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+
+Number of odd numbers: 8                                                        
+Number of even numbers: 6
+
+
